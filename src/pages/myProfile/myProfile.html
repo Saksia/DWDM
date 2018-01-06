@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar hideBackButton="true">
+    <ion-title>
+      Mi Perfil
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content auto-hide>
+  <div class="bg">
+  </div>
+
+  <div class="main-cnt">
+    <img src="../assets/img/profile.jpg" class="dp">
+    <h1 text-center class="text">{{usuario.getAlias()}}</h1>
+    <p text-center class="text">Reputación: {{(usuarioFacade.getLikesOf(userService.getUser())) - (usuarioFacade.getDislikesOf(userService.getUser()))}}</p>
+
+    <ion-segment [(ngModel)]="galleryType">
+      <ion-segment-button value="regular">
+        Mis chollos
+      </ion-segment-button>
+      <ion-segment-button value="favorites">
+        Favoritos
+      </ion-segment-button>
+    </ion-segment>
+
+    <div [ngSwitch]="galleryType">
+      <ion-grid *ngSwitchCase="'regular'">
+        <ion-row>
+          <ion-col col-6 col-md-4 col-xl-3 *ngFor="let chollo of chollos">
+            <div class="image-container" [style.background-image]="'url(assets/img/' + 4 + '.jpg)'" (click)="goToDetails(chollo.getId())">
+              <div class="card-title">{{chollo.getTitulo()}}</div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <div [ngSwitch]="galleryType">
+      <ion-grid *ngSwitchCase="'favorites'">
+        <ion-row>
+          <ion-col col-6 col-md-4 col-xl-3 *ngFor="let favorito of favoritos">
+            <div class="image-container" [style.background-image]="'url(assets/img/' + 4 + '.jpg)'" (click)="goToDetails(favorito.getId())">
+              <div class="card-title">{{favorito.getTitulo()}}</div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+
+  <ion-fab bottom right #fab>
+    <button ion-fab (click)="goToNewSale()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>

@@ -1,0 +1,30 @@
+<ion-header #head>
+  <ion-navbar hideBackButton="true">
+    <ion-buttons start>
+      <button ion-button icon-only menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>
+      Populares
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding id="page3" auto-hide hide-header [header]="head">
+  <ion-list>
+    <ion-item *ngFor="let chollo of chollos" (click)="goToDetails(chollo.getId())" [hidden]="categoryService.getCategoryId() > -1 && categoryService.getCategoryId() != chollo.getCategoria().getId()">
+      <ion-thumbnail item-start>
+        <img src="assets/img/4.jpg">
+      </ion-thumbnail>
+      <h2>{{chollo.getTitulo()}}</h2>
+      <p>{{chollo.getUsuario().getAlias()}}</p>
+      <p>{{cholloFacade.getLikesCountFor(chollo)}} Likes {{cholloFacade.getDislikesCountFor(chollo)}} Dislikes</p>
+      <p item-end>De {{chollo.getPrecioAntes()}}€ a {{chollo.getPrecioDespues()}}€</p>
+    </ion-item>
+  </ion-list>
+  <ion-fab bottom right #fab>
+    <button ion-fab (click)="goToNewSale()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>

@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Registrarse
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding id="page9">
+  <form id="signup-form9">
+    <ion-list id="signup-list11">
+      <ion-item id="signup-input11">
+        <ion-label>
+          Alias:
+        </ion-label>
+        <ion-input #alias type="text" placeholder=""></ion-input>
+      </ion-item>
+    </ion-list>
+    <div *ngIf="!dataIsCorrect" style="color: red">Rellene el alias</div>
+    <div *ngIf="aliasNotAvailable" style="color: red">El alias no esta disponible</div>
+    <button id="signup-button16" ion-button color="stable" block on-click="checkAlias(alias.value)">
+      Registrarse
+    </button>
+  </form>
+</ion-content>

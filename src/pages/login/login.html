@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Iniciar sesión
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding id="page8">
+  <form id="login-form8">
+    <ion-list id="login-list10">
+      <ion-item id="login-input8">
+        <ion-label>
+          Teléfono:
+        </ion-label>
+        <ion-input #telephone type="number" placeholder=""></ion-input>
+      </ion-item>
+    </ion-list>
+    <div *ngIf="!dataIsCorrect" style="color: red">Rellene con un número de teléfono</div>
+    <div class="spacer" style="height:40px;" id="login-spacer1"></div>
+    <button id="login-button14" ion-button color="stable" block on-click="checkTelephone(telephone.value)">
+      Iniciar sesión
+    </button>
+  </form>
+</ion-content>

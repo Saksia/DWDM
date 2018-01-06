@@ -1,0 +1,18 @@
+<ion-menu [content]="content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Categorías</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <ion-item (click)="refresh(-1)">Mostrar Todo</ion-item>
+      <ion-item *ngFor="let categoria of categorias" (click)="refresh(categoria.getId())">
+        {{categoria.getNombre()}}
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-nav #myNav [root]="rootPage" #content></ion-nav>
