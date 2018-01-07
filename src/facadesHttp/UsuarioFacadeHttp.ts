@@ -10,17 +10,17 @@ import { AppService } from "../services/AppService";
 export class UsuarioFacadeHttp extends AbstractEntityFacade{
     
     items : any;
+    item : any;
     constructor(private cholloFacade:CholloFacadeHttp, public appService: AppService) { super(); }
     // INSERT INTO usuario (telefono,alias,administrador) VALUES ("111111111","jaime",1);
     public create(entity: Usuario) { // INSERT + DEVOLVER ENTITY CON EL ULTIMO ID  
 
         var data = { telefono : entity.getTelefono(), alias : entity.getAlias() };
         
-        this.appService.doPost('users',data);
-        
-        this.findAll().push(entity); 
-        return entity;
+        return this.appService.doPost('users',data)
+
     }
+
     // UPDATE usuario SET telefono="?",alias="?",administrador=? WHERE id=?;
     public edit(entity: Usuario) { // EDIT
         var usuario: Usuario = this.find(entity.getId());
@@ -34,7 +34,7 @@ export class UsuarioFacadeHttp extends AbstractEntityFacade{
             (usuario, index) => {
                 if (usuario.getId() == entity.getId()) USUARIOS.splice(index, 1);
             }
-        );
+        ); 
     }
     // SELECT * FROM usuario WHERE id=?;
     public find(id: Number) {
@@ -50,12 +50,18 @@ export class UsuarioFacadeHttp extends AbstractEntityFacade{
         );
         return USUARIOS;
     }
+
     // SELECT * FROM usuario WHERE telefono=?;
     public findByTelephone(telefono: String) {
-        return this.findAll().find(
-            (usuario) => usuario.getTelefono() == telefono
-        );
+
+        this.appService.doGet('users','telefono',telefono).subscribe(response=>{
+            this.item = response.json();
+        });
+
+        return this.item;
+        
     }
+
     // SELECT * FROM usuario WHERE alias=?;
     public findByAlias(alias: String) {
         return this.findAll().find(

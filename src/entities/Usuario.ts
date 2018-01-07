@@ -27,5 +27,7 @@ export class Usuario implements Entity{
     public setTelefono(telefono:String){ this.telefono = telefono };
 
     public setAdministrador(administrador:Boolean){ this.administrador = administrador };
+
+    public setId(id:Number){ this.id = id };
     
   }

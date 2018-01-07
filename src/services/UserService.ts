@@ -4,13 +4,13 @@ import { UsuarioFacadeHttp } from "../facadesHttp/UsuarioFacadeHttp";
 
 @Injectable()
 export class UserService {
-    // private user: Usuario = USUARIOS[0];
-    private user: Usuario;
+    private user: Usuario = new Usuario('admin','111111111',true,1);
+    //private user: Usuario;
 
     constructor(private usuarioFacade: UsuarioFacadeHttp){
-        var userId: string = localStorage.getItem("userId")
-        if (userId == null) return;
-        this.user = this.usuarioFacade.find(Number(userId));
+       // var userId: string = localStorage.getItem("userId")
+      //  if (userId == null) return;
+      // this.user = this.usuarioFacade.find(Number(userId));
      }
 
     getUser(){
@@ -25,12 +25,15 @@ export class UserService {
 
     createUser(telefono: String, alias: String){
         if(this.usuarioFacade.findByAlias(alias) != null) return null;
-        this.user = this.usuarioFacade.create(new Usuario(
+        
+        this.usuarioFacade.create(new Usuario(
             alias,
             telefono,
-            false,
-            Math.trunc((Math.random() * 1000) + 5))
-        )
+            false)
+        ).subscribe((res:any )=> {
+            this.user = new Usuario(res.json().alias, res.json().telefono, false, res.json().id);
+        });
+
         this.storeUserInLocalStorage();
         return this.user;
     }
