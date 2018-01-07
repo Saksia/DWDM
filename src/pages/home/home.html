@@ -14,29 +14,31 @@
 </ion-header>
 
 <ion-content padding id="page2" auto-hide hide-header [header]="head">
-  <ion-card *ngFor="let chollo of chollos" [hidden]="categoryService.getCategoryId() > -1 && categoryService.getCategoryId() != chollo.getCategoria().getId()">
+  <ion-card *ngFor="let chollo of chollos" [hidden]="(chollo.visible == false) || (categoryService.getCategoryId() > -1 && categoryService.getCategoryId() != chollo.getCategoria().getId())">
     <ion-item (click)="goToDetails(chollo.getId())">
       <ion-avatar item-start>
         <img src="assets/img/profile.jpg">
       </ion-avatar>
       <h2>{{chollo.getUsuario().getAlias()}}</h2>
-      <h3>Reputación: {{(usuarioFacade.getLikesOf(chollo.getUsuario())) - (usuarioFacade.getDislikesOf(chollo.getUsuario()))}}</h3>
+      <!-- <h3>Reputación: {{getUserLikes(chollo.getUsuario())) - (getUserDDislikes(chollo.getUsuario()))}}</h3> -->
     </ion-item>
 
-    <img src="assets/img/4.jpg" (click)="goToDetails(chollo.getId())">
+    <img src="assets/img/4.jpg" (click)="goToDetails(chollo)">
 
-    <ion-card-content (click)="goToDetails(chollo.getId())">
+    <ion-card-content (click)="goToDetails(chollo)">
       <ion-item>
           <h2>{{chollo.getTitulo()}}</h2>
-          <p>{{chollo.getFechaActualizacion() | date: 'medium'}}</p>
+          <p>{{chollo.getFechaActualizacion()}}</p>
         </ion-item>
       <ion-list>
           <ion-item-divider color="light">Precio</ion-item-divider>
           <ion-item>{{chollo.getPrecioAntes()}}€ a {{chollo.getPrecioDespues()}}€</ion-item>
+          <!-- <ion-item-divider color="light">Reacciones</ion-item-divider>
+          <ion-item>{{cholloFacade.getLikesCountFor(chollo)}} Likes {{cholloFacade.getDislikesCountFor(chollo)}} Dislikes</ion-item> -->
       </ion-list>
     </ion-card-content>
 
-    <ion-row>
+    <!-- <ion-row>
       <ion-col>
         <button ion-button icon-left clear small (click)="addLikeTo(chollo.getId())" color="{{getColorForSave(chollo,true)}}">
           <ion-icon name="thumbs-up"></ion-icon>
@@ -50,7 +52,7 @@
           <div #dislikes>{{cholloFacade.getDislikesCountFor(chollo)}} Dislikes</div>
         </button>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
 
   </ion-card>
 

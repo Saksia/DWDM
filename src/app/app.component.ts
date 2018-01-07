@@ -4,12 +4,12 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { TabsControllerPage } from '../pages/tabs-controller/tabs-controller';
 import { Categoria } from '../entities/Categoria';
-import { CategoriaFacade } from '../facades/CategoriaFacade';
 import { NavController } from 'ionic-angular/navigation/nav-controller';
 import { ViewChild } from '@angular/core';
 import { CategoryService } from '../services/CategoryService';
 import { LoginPage } from '../pages/login/login';
 import { UserService } from '../services/UserService';
+import { CategoriaFacadeHttp } from '../facadesHttp/CategoriaFacadeHttp';
 
 @Component({
   templateUrl: 'app.html'
@@ -17,12 +17,12 @@ import { UserService } from '../services/UserService';
 export class MyApp {
   @ViewChild('myNav')navCtrl: NavController;
   rootPage:any;
-  categorias:Categoria[];
+  categorias:Categoria[] = [];
 
   constructor(platform: Platform, 
               statusBar: StatusBar, 
               splashScreen: SplashScreen,
-              private categoriaFacade: CategoriaFacade,
+              private categoriaFacade: CategoriaFacadeHttp,
               private categoryService: CategoryService,
               private userService: UserService) {
     platform.ready().then(() => {
@@ -32,7 +32,16 @@ export class MyApp {
       splashScreen.hide();
 
       this.rootPage = this.userService.getUser() == null ? LoginPage : TabsControllerPage;
-      this.categorias = this.categoriaFacade.findAll();
+      this.loadCategories();
+    });
+  }
+
+  loadCategories() {
+    this.categoriaFacade.findAll().subscribe(res=>{
+      var data = res.json();
+      data.forEach(categoria => {
+        this.categorias.push(new Categoria(categoria.nombre,categoria.id))
+      });
     });
   }
 

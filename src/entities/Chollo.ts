@@ -17,6 +17,7 @@ export class Chollo implements Entity{
     private empresaPatrocinada:EmpresaPatrocinada;
     private usuario:Usuario;
     private categoria:Categoria;
+    public visible:Boolean = true;
 //#endregion
 
     constructor(titulo:String, enlace:String, descripcion:String, precioAntes:Number, precioDespues:Number, fechaCreacion:Date, fechaActualizacion:Date, empresaNoPatrocinada:String, empresaPatrocinada:EmpresaPatrocinada, usuario:Usuario, categoria:Categoria, id?:Number) {

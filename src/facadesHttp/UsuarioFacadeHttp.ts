@@ -70,25 +70,11 @@ export class UsuarioFacadeHttp extends AbstractEntityFacade{
     }
 
     public getLikesOf(usuario: Usuario){
-        this.cholloFacade.findByUser(usuario).subscribe(res=>{
-            var chollos:Chollo[] = res.json();
-            var likes: number = 0;
-            chollos.forEach(
-            (chollo) => likes += this.cholloFacade.getLikesCountFor(chollo)          
-            );
-            return likes;
-        });
+        return this.appService.doGet('users/'+usuario.getId()+'/reactions?positiva=true');
         
     }
     
     public getDislikesOf(usuario: Usuario){
-        this.cholloFacade.findByUser(usuario).subscribe(res=>{
-            var chollos:Chollo[] = res.json();
-            var dislikes: number = 0;
-            chollos.forEach(
-                (chollo) => dislikes += this.cholloFacade.getDislikesCountFor(chollo)
-            );
-            return dislikes;
-        });
+        return this.appService.doGet('users/'+usuario.getId()+'/reactions?positiva=true');
     }
 }

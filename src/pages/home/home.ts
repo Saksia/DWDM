@@ -2,15 +2,17 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { DetailsPage } from '../details/details';
 import { Chollo } from '../../entities/Chollo';
-import { ReaccionFacade } from '../../facades/ReaccionFacade';
-import { Reaccion } from '../../entities/Reaccion';
+// import { ReaccionFacade } from '../../facades/ReaccionFacade';
+// import { Reaccion } from '../../entities/Reaccion';
 import { newSalePage } from '../newSale/newSale';
 import { Categoria } from '../../entities/Categoria';
-import { CategoriaFacade } from '../../facades/CategoriaFacade';
 import { CategoryService } from '../../services/CategoryService';
 import { UserService } from '../../services/UserService';
-import { UsuarioFacade } from '../../facades/UsuarioFacade';
 import { CholloFacadeHttp } from '../../facadesHttp/CholloFacadeHttp';
+import { Usuario } from '../../entities/Usuario';
+import { EmpresaPatrocinada } from '../../entities/EmpresaPatrocinada';
+import { CategoriaFacadeHttp } from '../../facadesHttp/CategoriaFacadeHttp';
+import { UsuarioFacadeHttp } from '../../facadesHttp/UsuarioFacadeHttp';
 
 @Component({
   selector: 'page-Home',
@@ -18,17 +20,16 @@ import { CholloFacadeHttp } from '../../facadesHttp/CholloFacadeHttp';
 })
 export class HomePage {
 
-  chollos:Chollo[];
-  categorias:Categoria[];
+  chollos:Chollo[] = [];
+  categorias:Categoria[] = [];
 
   constructor(public navCtrl: NavController,
               private cholloFacade: CholloFacadeHttp,
-              private categoriaFacade: CategoriaFacade,
-              private reaccionFacade: ReaccionFacade,
+              private categoriaFacade: CategoriaFacadeHttp,
+              // private reaccionFacade: ReaccionFacade,
               private categoryService: CategoryService,
               private userService: UserService,
-              private usuarioFacade: UsuarioFacade) {
-    this.loadCategories();
+              private usuarioFacade: UsuarioFacadeHttp) {
   }
 
   ionViewWillEnter() {
@@ -36,8 +37,8 @@ export class HomePage {
     this.categoryService.setCategoryId(-1);
   }
 
-  goToDetails(idChollo){
-    this.navCtrl.push(DetailsPage, {idChollo: idChollo});
+  goToDetails(chollo:Chollo){
+    this.navCtrl.push(DetailsPage, {idChollo: chollo.getId()});
   }
 
   goToNewSale(){
@@ -45,47 +46,65 @@ export class HomePage {
   }
 
   getChollos(){
+    this.chollos = [];
     this.cholloFacade.findAll().subscribe(res=>{
-      //foreach con res.json()
+      var data = res.json();
+      data.forEach(chollo => {
+        this.chollos.push(new Chollo(
+            chollo.titulo,
+            chollo.enlace,
+            chollo.descripcion,
+            chollo.precioAntes,
+            chollo.precioDespues,
+            chollo.fechaCreacion,
+            chollo.fechaActualizacion,
+            chollo.empresaNoPatrocinada,
+            new EmpresaPatrocinada(chollo.empresaPatrocinada.nombre,chollo.empresaPatrocinada.id),
+            new Usuario(chollo.usuario.alias,chollo.usuario.telefono,chollo.usuario.administrador,chollo.usuario.id),
+            new Categoria(chollo.categoria.nombre,chollo.categoria.id),
+            chollo.id
+          )
+        )
+      });
     });
   }
 
-  addLikeTo(cholloId:String){
-      this.cholloFacade.find(Number(cholloId)).subscribe(res=>{
-      var chollo; //chollo con la info de res.json()
-      var reaccion = new Reaccion(chollo, this.userService.getUser(), true);
-      if(this.reaccionFacade.find(reaccion) != null && this.reaccionFacade.find(reaccion).getPositiva()) { this.reaccionFacade.remove(reaccion); return; } 
-      this.reaccionFacade.remove(reaccion);
-      this.reaccionFacade.create(reaccion);
-    });
-  }
+  // getUserLikes(usuario: Usuario){
+  //   this.usuarioFacade.getLikesOf(usuario);
+  // }
 
-  addDislikeTo(cholloId:String){
-    this.cholloFacade.find(Number(cholloId)).subscribe(res=>{
-      var chollo; //chollo con la info de res.json()
-      var reaccion = new Reaccion(chollo, this.userService.getUser(), false);
-      if(this.reaccionFacade.find(reaccion) != null && !this.reaccionFacade.find(reaccion).getPositiva()) { this.reaccionFacade.remove(reaccion); return; } 
-      this.reaccionFacade.remove(reaccion);
-      this.reaccionFacade.create(reaccion);
-    });
+  // getUserDisLikes(usuario: Usuario){
+  //   this.usuarioFacade.getLikesOf(usuario);
+  // }
 
-  }
+  // addLikeTo(cholloId:String){
+  //     this.cholloFacade.find(Number(cholloId)).subscribe(res=>{
+  //     var chollo; //chollo con la info de res.json()
+  //     var reaccion = new Reaccion(chollo, this.userService.getUser(), true);
+  //     if(this.reaccionFacade.find(reaccion) != null && this.reaccionFacade.find(reaccion).getPositiva()) { this.reaccionFacade.remove(reaccion); return; } 
+  //     this.reaccionFacade.remove(reaccion);
+  //     this.reaccionFacade.create(reaccion);
+  //   });
+  // }
 
-  loadCategories() {
-    this.categorias = this.categoriaFacade.findAll();
-  }
+  // addDislikeTo(cholloId:String){
+  //   this.cholloFacade.find(Number(cholloId)).subscribe(res=>{
+  //     var chollo; //chollo con la info de res.json()
+  //     var reaccion = new Reaccion(chollo, this.userService.getUser(), false);
+  //     if(this.reaccionFacade.find(reaccion) != null && !this.reaccionFacade.find(reaccion).getPositiva()) { this.reaccionFacade.remove(reaccion); return; } 
+  //     this.reaccionFacade.remove(reaccion);
+  //     this.reaccionFacade.create(reaccion);
+  //   });
+  // }
 
   filterSales(ev: any) {
-    this.getChollos();
     let val = ev.target.value;
-    if (val && val.trim() != '') {
-      this.chollos = this.chollos.filter((chollo) => {
-        return (chollo.getTitulo().toLowerCase().indexOf(val.toLowerCase()) > -1);
+      this.chollos.forEach((chollo) => {
+        chollo.visible = (val && val.trim() == '') || (chollo.getTitulo().toLowerCase().indexOf(val.toLowerCase())) > -1 ? true : false;
       })
-    }
   }
 
-  getColorForSave(chollo:Chollo, positiva:Boolean){
-    return this.reaccionFacade.findByPositiva(new Reaccion (chollo, this.userService.getUser(), positiva)) == null? 'dark' : 'positive';
-  }
+  // getColorForSave(chollo:Chollo, positiva:Boolean){
+  //   return this.reaccionFacade.findByPositiva(new Reaccion (chollo, this.userService.getUser(), positiva)) == null? 'dark' : 'positive';
+  // }
 }

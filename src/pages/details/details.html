@@ -1,31 +1,31 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      {{chollo.getTitulo()}}
+      {{titulo}}
     </ion-title>
     <ion-buttons end>
-      <button ion-button (click)="goToNewSale(chollo.getId())" *ngIf="chollo.getUsuario().getId() == usuario.getId()">
+      <button ion-button (click)="goToNewSale()" *ngIf="esMio">
         Editar
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page5">
-  <ion-card id="details-card25">
+  <ion-card id="details-card25" *ngFor="let chollo of chollos">
     <ion-list>
         <ion-item>
             <ion-avatar item-start>
               <img src="assets/img/profile.jpg">
             </ion-avatar>
             <h2>{{chollo.getUsuario().getAlias()}}</h2>
-            <h3>Reputación: {{(usuarioFacade.getLikesOf(chollo.getUsuario())) - (usuarioFacade.getDislikesOf(chollo.getUsuario()))}}</h3>
+            <!-- <h3>Reputación: {{(usuarioFacade.getLikesOf(chollo.getUsuario())) - (usuarioFacade.getDislikesOf(chollo.getUsuario()))}}</h3> -->
           </ion-item>
         <img src="assets/img/4.jpg">
       <ion-list>
           <ion-item-divider color="light">Precio</ion-item-divider>
           <ion-item>{{chollo.getPrecioAntes()}}€ a {{chollo.getPrecioDespues()}}€</ion-item>
           <ion-item-divider color="light">Fecha</ion-item-divider>
-          <ion-item>{{chollo.getFechaActualizacion() | date: 'medium'}}</ion-item>
+          <ion-item>{{chollo.getFechaActualizacion()}}</ion-item>
           <ion-item-divider color="light">Descripción</ion-item-divider>
           <ion-item>{{chollo.getDescripcion()}}</ion-item>
           <ion-item-divider color="light">Empresa</ion-item-divider>
@@ -39,24 +39,31 @@
       </ion-item>
       <ion-row>
         <ion-col>
-          <button ion-button icon-left clear small (click)="addLikeTo(chollo.getId())" color="{{getColorForSave(chollo,true)}}">
+          <button ion-button icon-left clear small (click)="addLikeTo(chollo.getId())" *ngIf="liked != undefined && !liked" color="dark">
             <ion-icon name="thumbs-up"></ion-icon>
-            <div>
-              <span #likes>{{cholloFacade.getLikesCountFor(chollo)}}</span> Likes</div>
+              <!-- <div #likes>{{cholloFacade.getLikesCountFor(chollo)}} Likes</div> -->
+          </button>
+          <button ion-button icon-left clear small (click)="deleteLikeFrom(chollo.getId())" *ngIf="liked != undefined && liked" color="positive">
+            <ion-icon name="thumbs-up"></ion-icon>   
+              <!-- <div #likes>{{cholloFacade.getLikesCountFor(chollo)}} Likes</div> -->
           </button>
         </ion-col>
         <ion-col>
-          <button ion-button icon-left clear small (click)="addDislikeTo(chollo.getId())" color="{{getColorForSave(chollo,false)}}">
+          <button ion-button icon-left clear small (click)="addDislikeTo(chollo.getId())" *ngIf="disliked != undefined && !disliked" color="dark">
             <ion-icon name="thumbs-down"></ion-icon>
-            <div #dislikes>{{cholloFacade.getDislikesCountFor(chollo)}} Dislikes</div>
+            <!-- <div #dislikes>{{cholloFacade.getDislikesCountFor(chollo)}} Dislikes</div> -->
+          </button>
+          <button ion-button icon-left clear small (click)="removeDislikeFrom(chollo.getId())" *ngIf="disliked != undefined && disliked" color="positive">
+            <ion-icon name="thumbs-down"></ion-icon>
+            <!-- <div #dislikes>{{cholloFacade.getDislikesCountFor(chollo)}} Dislikes</div> -->
           </button>
         </ion-col>
       </ion-row>
       <ion-row>
-        <button *ngIf="favorito == false" id="details-button5" ion-button full outline (click)="addToFavourites(chollo.getId())">
+        <button *ngIf="favorito != undefined && favorito == false" id="details-button5" ion-button full outline (click)="addToFavourites(chollo.getId())">
           <ion-icon name="heart"></ion-icon>
         </button>
-        <button *ngIf="favorito == true" id="details-button4" ion-button color="assertive" full (click)="deleteFromFavourites(chollo.getId())">
+        <button *ngIf="favorito != undefined && favorito == true" id="details-button4" ion-button color="assertive" full (click)="deleteFromFavourites(chollo.getId())">
           <ion-icon name="heart"></ion-icon>
         </button>
       </ion-row>

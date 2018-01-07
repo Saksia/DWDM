@@ -29,11 +29,17 @@ export class AppService {
     }
 
     doPut(endpoint,data){
-        return this.http.put(this.baseUrl+endpoint,data);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        let body = JSON.stringify(data);
+        return this.http.put(this.baseUrl+endpoint,data, options);
     }
 
     doDelete(endpoint, data){
-        return this.http.delete(this.baseUrl+endpoint);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        let body = JSON.stringify(data);
+        return this.http.delete(this.baseUrl+endpoint, options);
     }
         
 

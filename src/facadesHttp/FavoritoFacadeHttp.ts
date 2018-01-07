@@ -4,37 +4,32 @@ import { Injectable } from "@angular/core";
 import { AbstractSaveUserRelationFacade } from "../facades/AbstractSaveUserRelationFacade";
 import { SaveUserRelation } from "../entities/SaveUserRelation";
 import { FAVORITOS } from "../db/db";
+import { AppService } from "../services/AppService";
 
 @Injectable()
 export class FavoritoFacadeHttp extends AbstractSaveUserRelationFacade{
     
+    constructor(private http:AppService){super();}
+
     // INSERT INTO favorito (chollo,usuario) VALUES (?,?);
     public create(saveUserRelation:SaveUserRelation) { // INSERT
-        this.findAll().push(saveUserRelation as Favorito); 
+        var favorito = {
+            chollo:saveUserRelation.getChollo().getId(),
+            usuario:saveUserRelation.getUsuario().getId()
+        }
+        return this.http.doPost('favorites?chollo=' + favorito.chollo + '&usuario=' + favorito.usuario,favorito);
     }
     // DELETE FROM favorito WHERE chollo=? AND usuario=?;
     public remove(saveUserRelation:SaveUserRelation) { // DELETE
-        FAVORITOS.forEach(
-            (favorito, index) => {
-                if (favorito.getUsuario().getId() == saveUserRelation.getUsuario().getId() && favorito.getChollo().getId() == saveUserRelation.getChollo().getId())
-                    FAVORITOS.splice(index, 1);
-            }
-        );
+        var favorito = {
+            chollo:saveUserRelation.getChollo().getId(),
+            usuario:saveUserRelation.getUsuario().getId()
+        }
+        return this.http.doDelete('favorites?chollo=' + favorito.chollo + '&usuario=' + favorito.usuario,favorito);
     }
-    // SELECT usuario.id AS usuarioId,usuario.telefono,usuario.alias,usuario.administrador,
-    // chollo.id AS cholloId,chollo.titulo,chollo.enlace,chollo.descripcion,chollo.precioAntes,chollo.precioDespues,chollo.fechaCreacion,chollo.fechaActualizacion,chollo.empresaNoPatrocinada,
-    // empresaPatrocinada.id AS empresaPatrocinadaID, empresaPatrocinada.nombre AS empresaPatrocinadaNombre,
-    // categoria.id AS categoriaID, categoria.nombre AS categoriaNombre
-    // FROM ((((favorito
-    // INNER JOIN usuario ON favorito.usuario = usuario.id)
-    // INNER JOIN chollo ON favorito.chollo = chollo.id)
-    // INNER JOIN categoria ON chollo.categoria = categoria.id)
-    // INNER JOIN empresaPatrocinada ON chollo.empresaPatrocinada= empresaPatrocinada.id)
-    // WHERE favorito.chollo=? AND favorito.usuario=?;
+
     public find(saveUserRelation:SaveUserRelation) {
-        return this.findAll().find(
-            (favorito) => favorito.getUsuario().getId() == saveUserRelation.getUsuario().getId() && favorito.getChollo().getId() == saveUserRelation.getChollo().getId()
-        );
+        return this.http.doGet('favorites?chollo='+saveUserRelation.getChollo().getId()+'&usuario='+saveUserRelation.getUsuario().getId());
     }
     // SOBRA PARA LA BD
     public findAll() {

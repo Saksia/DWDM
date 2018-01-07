@@ -2,37 +2,44 @@ import { Categoria } from "../entities/Categoria";
 import { Injectable } from "@angular/core";
 import { AbstractEntityFacade } from "../facades/AbstractEntityFacade";
 import { CATEGORIAS } from "../db/db";
+import { AppService } from "../services/AppService";
 
 @Injectable()
 export class CategoriaFacadeHttp extends AbstractEntityFacade{
     
-    // INSERT INTO categoria (nombre) VALUES (?);
-    public create(entity: Categoria) { // INSERT + DEVOLVER ENTITY CON EL ULTIMO ID
-        this.findAll().push(entity); 
-        return entity;
+    constructor(private http:AppService){ super(); }
+
+    
+    public create(entity: Categoria) { 
+        var categoria = {
+            nombre:entity.getNombre()
+        }
+        return this.http.doPost('categories',categoria);
     }
-    // UPDATE categoria SET nombre="?" WHERE id=?;
+    
     public edit(entity: Categoria) { // EDIT
-        var categoria: Categoria = this.find(entity.getId());
-        categoria.setNombre(entity.getNombre());
+        var categoria = {
+            nombre:entity.getNombre()
+        }
+        return this.http.doPut('categories/'+entity.getId(),categoria);
     }
-    // DELETE FROM categoria WHERE id=?;
+
+  
     public remove(entity: Categoria) { // DELETE
-        CATEGORIAS.forEach(
-            (categoria, index) => {
-                if (categoria.getId() === entity.getId()) CATEGORIAS.splice(index, 1);
-            }
-        );
+        var categoria = {
+            nombre:entity.getNombre()
+        }
+        return this.http.doDelete('categories/'+entity.getId(),categoria);
     }
-    // SELECT * FROM categoria WHERE id=?;
+    
+
     public find(id: Number) {
-        return this.findAll().find(
-            (categoria) => categoria.getId() == id 
-        );
+        return this.http.doGet('categories/'+id);
     }
-    // SELECT * FROM categoria;
+   
+
     public findAll() {
-        return CATEGORIAS;
+        return this.http.doGet('categories');
     }
     
 }

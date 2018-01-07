@@ -2,36 +2,46 @@ import { EmpresaPatrocinada } from "../entities/EmpresaPatrocinada";
 import { Injectable } from "@angular/core";
 import { AbstractEntityFacade } from "../facades/AbstractEntityFacade";
 import { EMPRESAS_PATROCINADAS } from "../db/db";
+import { AppService } from "../services/AppService";
 
 @Injectable()
 export class EmpresaPatrocinadaFacadeHttp extends AbstractEntityFacade{
-    // INSERT INTO empresaPatrocinada (nombre) VALUES (?);
-    public create(entity: EmpresaPatrocinada) { // INSERT + DEVOLVER ENTITY CON EL ULTIMO ID
-        this.findAll().push(entity); 
-        return entity;
+    
+    constructor(private http:AppService){ super(); }
+
+    public create(entity: EmpresaPatrocinada) {
+        
+        var empresaPatrocinada = {
+            nombre: entity.getNombre()
+        }
+        return this.http.doPost('companies',empresaPatrocinada);
+        
     }
-    // UPDATE empresaPatrocinada SET nombre="?" WHERE id=?;
-    public edit(entity: EmpresaPatrocinada) { // EDIT
-        var empresaPatrocinada: EmpresaPatrocinada = this.find(entity.getId());
-        empresaPatrocinada.setNombre(entity.getNombre());
+
+    public edit(entity: EmpresaPatrocinada) { 
+        var empresaPatrocinada = {
+            nombre:entity.getNombre()
+        }
+        return this.http.doPut('companies/'+entity.getId(),empresaPatrocinada);
     }
-    // DELETE FROM empresaPatrocinada WHERE id=?;
-    public remove(entity: EmpresaPatrocinada) { // DELETE
-        EMPRESAS_PATROCINADAS.forEach(
-            (empresaPatrocinada, index) => {
-                if (empresaPatrocinada.getId() === entity.getId()) EMPRESAS_PATROCINADAS.splice(index, 1);
-            }
-        );
+   
+    public remove(entity: EmpresaPatrocinada) { 
+
+        var empresapatrocinada = {
+            nombre:entity.getNombre()
+        }
+
+        return this.http.doDelete('companies/'+entity.getId(),empresapatrocinada);
     }
-    // SELECT * FROM empresaPatrocinada WHERE id=?;
+
+
     public find(id: Number) {
-        return this.findAll().find(
-            (empresaPatrocinada) => empresaPatrocinada.getId() == id 
-        );
+        return this.http.doGet('companies/'+id);
     }
-    // SELECT * FROM empresaPatrocinada;
+
+
     public findAll() {
-        return EMPRESAS_PATROCINADAS;
+        return this.http.doGet('companies');
     }
     
 }
