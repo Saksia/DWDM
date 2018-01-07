@@ -70,20 +70,25 @@ export class UsuarioFacadeHttp extends AbstractEntityFacade{
     }
 
     public getLikesOf(usuario: Usuario){
-        var chollos:Chollo[] = this.cholloFacade.findByUser(usuario);
-        var likes: number = 0;
-        chollos.forEach(
+        this.cholloFacade.findByUser(usuario).subscribe(res=>{
+            var chollos:Chollo[] = res.json();
+            var likes: number = 0;
+            chollos.forEach(
             (chollo) => likes += this.cholloFacade.getLikesCountFor(chollo)          
-        );
-        return likes;
+            );
+            return likes;
+        });
+        
     }
     
     public getDislikesOf(usuario: Usuario){
-        var chollos:Chollo[] = this.cholloFacade.findByUser(usuario);
-        var dislikes: number = 0;
-        chollos.forEach(
-            (chollo) => dislikes += this.cholloFacade.getDislikesCountFor(chollo)
-        );
-        return dislikes;
+        this.cholloFacade.findByUser(usuario).subscribe(res=>{
+            var chollos:Chollo[] = res.json();
+            var dislikes: number = 0;
+            chollos.forEach(
+                (chollo) => dislikes += this.cholloFacade.getDislikesCountFor(chollo)
+            );
+            return dislikes;
+        });
     }
 }
