@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { DetailsPage } from '../details/details';
-import { CholloFacade } from '../../facades/CholloFacade';
 import { Chollo } from '../../entities/Chollo';
 import { ReaccionFacade } from '../../facades/ReaccionFacade';
 import { Reaccion } from '../../entities/Reaccion';
@@ -11,6 +10,7 @@ import { CategoriaFacade } from '../../facades/CategoriaFacade';
 import { CategoryService } from '../../services/CategoryService';
 import { UserService } from '../../services/UserService';
 import { UsuarioFacade } from '../../facades/UsuarioFacade';
+import { CholloFacadeHttp } from '../../facadesHttp/CholloFacadeHttp';
 
 @Component({
   selector: 'page-Home',
@@ -22,7 +22,7 @@ export class HomePage {
   categorias:Categoria[];
 
   constructor(public navCtrl: NavController,
-              private cholloFacade: CholloFacade,
+              private cholloFacade: CholloFacadeHttp,
               private categoriaFacade: CategoriaFacade,
               private reaccionFacade: ReaccionFacade,
               private categoryService: CategoryService,

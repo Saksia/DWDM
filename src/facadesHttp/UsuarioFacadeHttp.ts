@@ -44,7 +44,7 @@ export class UsuarioFacadeHttp extends AbstractEntityFacade{
     }
     // SELECT * FROM usuario;
     public findAll() {
-        this.appService.doGetAll('users').subscribe(response=>{
+        this.appService.doGet('users').subscribe(response=>{
             this.items = response.json();
             }
         );
@@ -54,7 +54,7 @@ export class UsuarioFacadeHttp extends AbstractEntityFacade{
     // SELECT * FROM usuario WHERE telefono=?;
     public findByTelephone(telefono: String) {
 
-        this.appService.doGet('users','telefono',telefono).subscribe(response=>{
+        this.appService.doGet('users?telefono='+telefono).subscribe(response=>{
             this.item = response.json();
         });
 

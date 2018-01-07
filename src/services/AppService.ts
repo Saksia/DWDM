@@ -10,26 +10,30 @@ export class AppService {
 
     constructor(http: Http){
         this.http = http;
-        this.baseUrl = "http://85.155.236.226:4567";
+        this.baseUrl = "http://85.155.236.226:4567/";
      }
 
-     doGet(entity, attribute, data){
+    doGet(endpoint){
          var prueba;
-        return this.http.get(this.baseUrl + '/' + entity + '?'+ attribute+'='+data+"");       
-     }
+        return this.http.get(this.baseUrl+endpoint);       
+    }
 
-     doGetAll(entity){
-        return this.http.get('http://85.155.236.226:4567'+ '/' + entity);
-     }
-
-     doPost(entity,data){
+    doPost(entity,data){
 
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         let body = JSON.stringify(data);
         headers.append("Accept", "application/json");
 
-        return this.http.post('http://85.155.236.226:4567'+'/'+entity, data, options);
+        return this.http.post(this.baseUrl+entity, data, options);
+    }
+
+    doPut(endpoint,data){
+        return this.http.put(this.baseUrl+endpoint,data);
+    }
+
+    doDelete(endpoint, data){
+        return this.http.delete(this.baseUrl+endpoint);
     }
         
 
