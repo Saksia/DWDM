@@ -45,23 +45,30 @@ export class HomePage {
   }
 
   getChollos(){
-    this.chollos = this.cholloFacade.findAll();
+    this.cholloFacade.findAll().subscribe(res=>{
+      //foreach con res.json()
+    });
   }
 
   addLikeTo(cholloId:String){
-    var chollo = (this.cholloFacade.find(Number(cholloId)));
-    var reaccion = new Reaccion(chollo, this.userService.getUser(), true);
-    if(this.reaccionFacade.find(reaccion) != null && this.reaccionFacade.find(reaccion).getPositiva()) { this.reaccionFacade.remove(reaccion); return; } 
-    this.reaccionFacade.remove(reaccion);
-    this.reaccionFacade.create(reaccion);
+      this.cholloFacade.find(Number(cholloId)).subscribe(res=>{
+      var chollo; //chollo con la info de res.json()
+      var reaccion = new Reaccion(chollo, this.userService.getUser(), true);
+      if(this.reaccionFacade.find(reaccion) != null && this.reaccionFacade.find(reaccion).getPositiva()) { this.reaccionFacade.remove(reaccion); return; } 
+      this.reaccionFacade.remove(reaccion);
+      this.reaccionFacade.create(reaccion);
+    });
   }
 
   addDislikeTo(cholloId:String){
-    var chollo = (this.cholloFacade.find(Number(cholloId)));
-    var reaccion = new Reaccion(chollo, this.userService.getUser(), false);
-    if(this.reaccionFacade.find(reaccion) != null && !this.reaccionFacade.find(reaccion).getPositiva()) { this.reaccionFacade.remove(reaccion); return; } 
-    this.reaccionFacade.remove(reaccion);
-    this.reaccionFacade.create(reaccion);
+    this.cholloFacade.find(Number(cholloId)).subscribe(res=>{
+      var chollo; //chollo con la info de res.json()
+      var reaccion = new Reaccion(chollo, this.userService.getUser(), false);
+      if(this.reaccionFacade.find(reaccion) != null && !this.reaccionFacade.find(reaccion).getPositiva()) { this.reaccionFacade.remove(reaccion); return; } 
+      this.reaccionFacade.remove(reaccion);
+      this.reaccionFacade.create(reaccion);
+    });
+
   }
 
   loadCategories() {
