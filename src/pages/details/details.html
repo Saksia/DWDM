@@ -39,23 +39,23 @@
       </ion-item>
       <ion-row>
         <ion-col>
-          <button ion-button icon-left clear small (click)="addLikeTo(chollo.getId())" *ngIf="liked != undefined && !liked" color="dark">
+          <button ion-button icon-left clear small (click)="addLike()" *ngIf="liked != undefined && !liked" color="dark">
             <ion-icon name="thumbs-up"></ion-icon>
-              <!-- <div #likes>{{cholloFacade.getLikesCountFor(chollo)}} Likes</div> -->
+              <div #likes>{{likesCount}} Likes</div>
           </button>
-          <button ion-button icon-left clear small (click)="deleteLikeFrom(chollo.getId())" *ngIf="liked != undefined && liked" color="positive">
+          <button ion-button icon-left clear small (click)="removeLike()" *ngIf="liked != undefined && liked" color="positive">
             <ion-icon name="thumbs-up"></ion-icon>   
-              <!-- <div #likes>{{cholloFacade.getLikesCountFor(chollo)}} Likes</div> -->
+              <div #likes>{{likesCount}} Likes</div>
           </button>
         </ion-col>
         <ion-col>
-          <button ion-button icon-left clear small (click)="addDislikeTo(chollo.getId())" *ngIf="disliked != undefined && !disliked" color="dark">
+          <button ion-button icon-left clear small (click)="addDislike()" *ngIf="disliked != undefined && !disliked" color="dark">
             <ion-icon name="thumbs-down"></ion-icon>
-            <!-- <div #dislikes>{{cholloFacade.getDislikesCountFor(chollo)}} Dislikes</div> -->
+            <div #dislikes>{{dislikesCount}} Dislikes</div>
           </button>
-          <button ion-button icon-left clear small (click)="removeDislikeFrom(chollo.getId())" *ngIf="disliked != undefined && disliked" color="positive">
+          <button ion-button icon-left clear small (click)="removeDislike()" *ngIf="disliked != undefined && disliked" color="positive">
             <ion-icon name="thumbs-down"></ion-icon>
-            <!-- <div #dislikes>{{cholloFacade.getDislikesCountFor(chollo)}} Dislikes</div> -->
+            <div #dislikes>{{dislikesCount}} Dislikes</div>
           </button>
         </ion-col>
       </ion-row>

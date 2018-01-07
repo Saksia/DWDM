@@ -89,15 +89,11 @@ export class CholloFacadeHttp extends AbstractEntityFacade{
 
 
     public getLikesCountFor(chollo: Chollo){
-        return this.reaccionFacade.findAll().filter(
-            (reaccion) => reaccion.getChollo().getId() == chollo.getId() && reaccion.getPositiva() == true
-        ).length;
+        return this.http.doGet('saves/' + chollo.getId() + '/reactions?positiva=true');
     }
 
     public getDislikesCountFor(chollo: Chollo){
-        return this.reaccionFacade.findAll().filter(
-            (reaccion) => reaccion.getChollo().getId() == chollo.getId() && reaccion.getPositiva() == false
-        ).length;
+        return this.http.doGet('saves/' + chollo.getId() + '/reactions?positiva=false');
     }
     
 }

@@ -12,34 +12,34 @@ export class ReaccionFacadeHttp extends AbstractSaveUserRelationFacade{
 
     constructor(private http:AppService){super();}
  
-    // INSERT INTO reaccion (chollo,usuario,positiva) VALUES (?,?,?);
+
     public create(saveUserRelation:SaveUserRelation) { // INSERT
-        this.findAll().push(saveUserRelation as Reaccion); 
+        var reaccion = {
+            chollo:saveUserRelation.getChollo().getId(),
+            usuario:saveUserRelation.getUsuario().getId(),
+            positiva:(saveUserRelation as Reaccion).getPositiva()
+        }
+        return this.http.doPost('reactions',reaccion);
     }
-    // UPDATE reaccion SET positiva=? WHERE chollo=? AND usuario=?;
+
     public edit(saveUserRelation: Reaccion) { // EDIT
-        this.find(saveUserRelation).setPositiva(saveUserRelation.getPositiva());
+        var reaccion = {
+            chollo:saveUserRelation.getChollo().getId(),
+            usuario:saveUserRelation.getUsuario().getId(),
+            positiva:(saveUserRelation as Reaccion).getPositiva()
+        }
+        return this.http.doPut('reactions',reaccion);
     }
-    // DELETE FROM reaccion WHERE chollo=? AND usuario=?;
+
     public remove(saveUserRelation:SaveUserRelation) { // DELETE
-        REACCIONES.forEach(
-            (reaccion, index) => {
-                if (reaccion.getUsuario().getId() == saveUserRelation.getUsuario().getId() && reaccion.getChollo().getId() == saveUserRelation.getChollo().getId())
-                    REACCIONES.splice(index, 1);
-            }
-        );
+        var reaccion = {
+            chollo:saveUserRelation.getChollo().getId(),
+            usuario:saveUserRelation.getUsuario().getId(),
+            positiva:(saveUserRelation as Reaccion).getPositiva()
+        }
+        return this.http.doDelete('reactions?chollo=' + reaccion.chollo + '&usuario=' + reaccion.usuario,reaccion);
     }
-    // SELECT reaccion.positiva,
-    // usuario.id AS usuarioId,usuario.telefono,usuario.alias,usuario.administrador,
-    // chollo.id AS cholloId,chollo.titulo,chollo.enlace,chollo.descripcion,chollo.precioAntes,chollo.precioDespues,chollo.fechaCreacion,chollo.fechaActualizacion,chollo.empresaNoPatrocinada,
-    // empresaPatrocinada.id AS empresaPatrocinadaID, empresaPatrocinada.nombre AS empresaPatrocinadaNombre,
-    // categoria.id AS categoriaID, categoria.nombre AS categoriaNombre
-    // FROM ((((reaccion
-    // INNER JOIN usuario ON reaccion.usuario = usuario.id)
-    // INNER JOIN chollo ON reaccion.chollo = chollo.id)
-    // INNER JOIN categoria ON chollo.categoria = categoria.id)
-    // INNER JOIN empresaPatrocinada ON chollo.empresaPatrocinada= empresaPatrocinada.id)
-    // WHERE reaccion.chollo=? AND reaccion.usuario=?;
+
     public find(saveUserRelation: Reaccion) {
         return this.findAll().find(
             (reaccion) => 

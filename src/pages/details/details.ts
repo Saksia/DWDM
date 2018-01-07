@@ -27,6 +27,8 @@ export class DetailsPage {
   esMio:Boolean;
   liked:Boolean;
   disliked:Boolean;
+  likesCount:number;
+  dislikesCount:number;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -63,6 +65,8 @@ export class DetailsPage {
         this.getFavorito();
         this.getLiked();
         this.getDisliked();
+        this.getLikesCount();
+        this.getDislikesCount();
     });
   }
 
@@ -93,7 +97,6 @@ export class DetailsPage {
   getLiked(){
     this.reaccionFacade.findByPositiva(new Reaccion (this.chollos[0], this.userService.getUser(), true)).subscribe(res =>{
       this.liked = res.json() !== null;
-      alert(res);
     });
   }
 
@@ -103,21 +106,66 @@ export class DetailsPage {
     });
   }
 
-  // addLikeTo(cholloId:String){
-  //   var chollo = (this.cholloFacade.find(Number(cholloId)));
-  //   var reaccion = new Reaccion(chollo, this.userService.getUser(), true);
-  //   if(this.reaccionFacade.find(reaccion) != null && this.reaccionFacade.find(reaccion).getPositiva()) { this.reaccionFacade.remove(reaccion); return; } 
-  //   this.reaccionFacade.remove(reaccion);
-  //   this.reaccionFacade.create(reaccion);
-  // }
+  getLikesCount(){
+    this.cholloFacade.getLikesCountFor(this.chollos[0]).subscribe((res) =>{
+      this.likesCount = res.json();
+    });
+  }
 
-  // addDislikeTo(cholloId:String){
-  //   var chollo = (this.cholloFacade.find(Number(cholloId)));
-  //   var reaccion = new Reaccion(chollo, this.userService.getUser(), false);
-  //   if(this.reaccionFacade.find(reaccion) != null && !this.reaccionFacade.find(reaccion).getPositiva()) { this.reaccionFacade.remove(reaccion); return; } 
-  //   this.reaccionFacade.remove(reaccion);
-  //   this.reaccionFacade.create(reaccion);
-  // }
+  getDislikesCount(){
+    this.cholloFacade.getDislikesCountFor(this.chollos[0]).subscribe((res) =>{
+      this.dislikesCount = res.json();
+    });
+  }
+
+  addLike(){
+    if (this.disliked) this.editReaccionTo(true);
+    else this.reaccionFacade.create(new Reaccion(this.chollos[0], this.usuario, true)).subscribe(res =>
+      {
+        this.liked = true;
+        this.likesCount++;
+      });
+  }
+
+  addDislike(){
+    if (this.liked) this.editReaccionTo(false);
+    else this.reaccionFacade.create(new Reaccion(this.chollos[0], this.usuario, false)).subscribe(res =>
+      {
+        this.disliked = true;
+        this.dislikesCount++;
+      });
+  }
+
+  removeLike(){
+    this.reaccionFacade.remove(new Reaccion(this.chollos[0], this.usuario, true)).subscribe(res =>
+      {
+        this.liked = false;
+        this.likesCount--;
+      }); 
+  }
+
+  removeDislike(){
+    this.reaccionFacade.remove(new Reaccion(this.chollos[0], this.usuario, false)).subscribe(res =>
+      {
+        this.disliked = false;
+        this.dislikesCount--;
+      }); 
+  }
+
+  editReaccionTo(to:Boolean){
+    this.reaccionFacade.edit(new Reaccion(this.chollos[0], this.usuario, to)).subscribe(res =>
+      {
+        this.disliked = !this.disliked;
+        this.liked = !this.liked;
+        if(to){
+         this.dislikesCount--; 
+         this.likesCount++;
+        }else{
+         this.dislikesCount++; 
+         this.likesCount--;
+        }
+      }); 
+  }
 
   getColorForSave(chollo:Chollo, positiva:Boolean){
     return this.reaccionFacade.findByPositiva(new Reaccion (chollo, this.userService.getUser(), positiva)) == null? 'dark' : 'positive';
