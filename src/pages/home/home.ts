@@ -33,8 +33,15 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
+    this.resetCategoriesClasses();
     this.getChollos();
     this.categoryService.setCategoryId(-1);
+  }
+
+  resetCategoriesClasses(){
+    var categories = document.getElementById("categoryList").children;
+    for (var i = 0; i < categories.length; i++) categories[i].classList.remove("activeCategory");
+    categories[0].classList.add("activeCategory")
   }
 
   goToDetails(chollo:Chollo){
@@ -69,6 +76,13 @@ export class HomePage {
     });
   }
 
+  filterSales(ev: any) {
+    let val = ev.target.value;
+      this.chollos.forEach((chollo) => {
+        chollo.visible = (val && val.trim() == '') || (chollo.getTitulo().toLowerCase().indexOf(val.toLowerCase())) > -1 ? true : false;
+      })
+  }
+
   // getUserLikes(usuario: Usuario){
   //   this.usuarioFacade.getLikesOf(usuario);
   // }
@@ -96,13 +110,6 @@ export class HomePage {
   //     this.reaccionFacade.create(reaccion);
   //   });
   // }
-
-  filterSales(ev: any) {
-    let val = ev.target.value;
-      this.chollos.forEach((chollo) => {
-        chollo.visible = (val && val.trim() == '') || (chollo.getTitulo().toLowerCase().indexOf(val.toLowerCase())) > -1 ? true : false;
-      })
-  }
 
   // getColorForSave(chollo:Chollo, positiva:Boolean){
   //   return this.reaccionFacade.findByPositiva(new Reaccion (chollo, this.userService.getUser(), positiva)) == null? 'dark' : 'positive';

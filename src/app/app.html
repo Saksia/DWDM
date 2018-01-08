@@ -6,9 +6,9 @@
   </ion-header>
 
   <ion-content>
-    <ion-list>
-      <ion-item (click)="refresh(-1)">Mostrar Todo</ion-item>
-      <ion-item *ngFor="let categoria of categorias" (click)="refresh(categoria.getId())">
+    <ion-list id="categoryList">
+      <ion-item class="activeCategory" (click)="refresh(-1, $event)">Mostrar Todo</ion-item>
+      <ion-item *ngFor="let categoria of categorias" (click)="refresh(categoria.getId(), $event)">
         {{categoria.getNombre()}}
       </ion-item>
     </ion-list>

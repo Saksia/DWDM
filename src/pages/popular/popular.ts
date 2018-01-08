@@ -23,8 +23,15 @@ export class PopularPage {
   }
   
   ionViewWillEnter() {
+    this.resetCategoriesClasses();
     this.getPopulars();
     this.categoryService.setCategoryId(-1);
+  }
+
+  resetCategoriesClasses(){
+    var categories = document.getElementById("categoryList").children;
+    for (var i = 0; i < categories.length; i++) categories[i].classList.remove("activeCategory");
+    categories[0].classList.add("activeCategory")
   }
 
   goToDetails(idChollo){

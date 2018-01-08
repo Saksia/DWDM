@@ -45,7 +45,10 @@ export class MyApp {
     });
   }
 
-  refresh(categoriaId){
+  refresh(categoriaId, event){
+    var categories = document.getElementById("categoryList").children;
+    for (var i = 0; i < categories.length; i++) categories[i].classList.remove("activeCategory");
+    event.currentTarget.classList.add("activeCategory");
     this.categoryService.setCategoryId(categoriaId);
   }
   
