@@ -75,6 +75,6 @@ export class UsuarioFacadeHttp extends AbstractEntityFacade{
     }
     
     public getDislikesOf(usuario: Usuario){
-        return this.appService.doGet('users/'+usuario.getId()+'/reactions?positiva=true');
+        return this.appService.doGet('users/'+usuario.getId()+'/reactions?positiva=false');
     }
 }

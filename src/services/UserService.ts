@@ -5,6 +5,7 @@ import { UsuarioFacadeHttp } from "../facadesHttp/UsuarioFacadeHttp";
 @Injectable()
 export class UserService {
     private user: Usuario = new Usuario('Admin','111111111',true,1);
+    // private user: Usuario = new Usuario('Usuario1','222222222',false,2);
     //private user: Usuario;
 
     constructor(private usuarioFacade: UsuarioFacadeHttp){

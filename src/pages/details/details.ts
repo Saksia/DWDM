@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Chollo } from '../../entities/Chollo';
 import { NavParams } from 'ionic-angular/navigation/nav-params';
-import { UsuarioFacade } from '../../facades/UsuarioFacade';
 import { newSalePage } from '../newSale/newSale';
 import { Usuario } from '../../entities/Usuario';
 import { Favorito } from '../../entities/Favorito';
@@ -13,6 +12,7 @@ import { EmpresaPatrocinada } from '../../entities/EmpresaPatrocinada';
 import { Categoria } from '../../entities/Categoria';
 import { FavoritoFacadeHttp } from '../../facadesHttp/FavoritoFacadeHttp';
 import { ReaccionFacadeHttp } from '../../facadesHttp/ReaccionFacadeHttp';
+import { UsuarioFacadeHttp } from '../../facadesHttp/UsuarioFacadeHttp';
 
 @Component({
   selector: 'page-details',
@@ -29,11 +29,13 @@ export class DetailsPage {
   disliked:Boolean;
   likesCount:number;
   dislikesCount:number;
+  userLikes:number;
+  userDislikes:number;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private cholloFacade: CholloFacadeHttp,
-              private usuarioFacade: UsuarioFacade,
+              private usuarioFacade: UsuarioFacadeHttp,
               private favoritoFacade: FavoritoFacadeHttp,
               private reaccionFacade: ReaccionFacadeHttp,
               private userService: UserService) {
@@ -67,11 +69,13 @@ export class DetailsPage {
         this.getDisliked();
         this.getLikesCount();
         this.getDislikesCount();
+        this.getUserLikes();
+        this.getUserDislikes();
     });
   }
 
   goToNewSale(){
-    this.navCtrl.push(newSalePage, {idChollo: this.chollos[0]});
+    this.navCtrl.push(newSalePage, {idChollo: this.chollos[0].getId()});
   }
 
   getFavorito() {
@@ -79,6 +83,18 @@ export class DetailsPage {
       var favorito = res.json();
       this.favorito = favorito != null;
     });
+  }
+
+  getUserLikes(){
+    this.usuarioFacade.getLikesOf(this.usuario).subscribe(res => {
+        this.userLikes = res.json();
+    });
+  }
+
+  getUserDislikes(){
+    this.usuarioFacade.getDislikesOf(this.usuario).subscribe(res => {
+      this.userDislikes = res.json();
+  });
   }
 
   addToFavourites(){
@@ -124,6 +140,7 @@ export class DetailsPage {
       {
         this.liked = true;
         this.likesCount++;
+        this.userLikes++;
       });
   }
 
@@ -133,6 +150,7 @@ export class DetailsPage {
       {
         this.disliked = true;
         this.dislikesCount++;
+        this.userDislikes++;
       });
   }
 
@@ -141,6 +159,7 @@ export class DetailsPage {
       {
         this.liked = false;
         this.likesCount--;
+        this.userLikes--;
       }); 
   }
 
@@ -149,6 +168,7 @@ export class DetailsPage {
       {
         this.disliked = false;
         this.dislikesCount--;
+        this.userDislikes--;
       }); 
   }
 
@@ -159,10 +179,14 @@ export class DetailsPage {
         this.liked = !this.liked;
         if(to){
          this.dislikesCount--; 
+         this.userDislikes--;
          this.likesCount++;
+         this.userLikes++;
         }else{
          this.dislikesCount++; 
+         this.userDislikes++;
          this.likesCount--;
+         this.userLikes--;
         }
       }); 
   }

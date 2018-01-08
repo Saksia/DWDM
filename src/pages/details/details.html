@@ -18,14 +18,16 @@
               <img src="assets/img/profile.jpg">
             </ion-avatar>
             <h2>{{chollo.getUsuario().getAlias()}}</h2>
-            <!-- <h3>Reputación: {{(usuarioFacade.getLikesOf(chollo.getUsuario())) - (usuarioFacade.getDislikesOf(chollo.getUsuario()))}}</h3> -->
+            <h3>Reputación: {{userLikes}} Likes {{userDislikes}} Dislikes</h3>
           </ion-item>
         <img src="assets/img/4.jpg">
       <ion-list>
           <ion-item-divider color="light">Precio</ion-item-divider>
-          <ion-item>{{chollo.getPrecioAntes()}}€ a {{chollo.getPrecioDespues()}}€</ion-item>
+          <ion-item>De {{chollo.getPrecioAntes()}}€ a {{chollo.getPrecioDespues()}}€</ion-item>
           <ion-item-divider color="light">Fecha</ion-item-divider>
           <ion-item>{{chollo.getFechaActualizacion()}}</ion-item>
+          <ion-item-divider color="light">Enlace</ion-item-divider>
+          <ion-item><a>{{chollo.getEnlace()}}</a></ion-item>
           <ion-item-divider color="light">Descripción</ion-item-divider>
           <ion-item>{{chollo.getDescripcion()}}</ion-item>
           <ion-item-divider color="light">Empresa</ion-item-divider>
@@ -33,6 +35,7 @@
           <ion-item-divider color="light">Categoría</ion-item-divider>
           <ion-item>{{chollo.getCategoria().getNombre()}}</ion-item>
         </ion-list>
+      <ion-item-divider color="light">Social</ion-item-divider>
       <ion-item color="none" id="details-list-item66">
         <ion-icon name="share" item-left></ion-icon>
         Compartir

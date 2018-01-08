@@ -12,7 +12,7 @@
   <div class="main-cnt">
     <img src="../assets/img/profile.jpg" class="dp">
     <h1 text-center class="text">{{usuario.getAlias()}}</h1>
-    <p text-center class="text">Reputación: {{(usuarioFacade.getLikesOf(userService.getUser())) - (usuarioFacade.getDislikesOf(userService.getUser()))}}</p>
+    <p text-center class="text">Reputación: {{userLikes}} Likes {{userDislikes}} Dislikes</p>
 
     <ion-segment [(ngModel)]="galleryType">
       <ion-segment-button value="regular">

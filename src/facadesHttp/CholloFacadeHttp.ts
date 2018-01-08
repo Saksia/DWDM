@@ -43,18 +43,11 @@ export class CholloFacadeHttp extends AbstractEntityFacade{
             categoria: entity.getCategoria().getId()
         };
 
-        this.http.doPut('/saves/'+entity.getId(),chollo);
+        return this.http.doPut('/saves/'+entity.getId(),chollo);
     }
 
     public remove(entity: Chollo) { // DELETE
-        CHOLLOS.forEach(
-            (chollo, index) => {
-                if (chollo.getId() === entity.getId()) CHOLLOS.splice(index, 1);
-            }
-        );
-
-        this.favoritoFacade.removeWithSave(entity);
-        this.reaccionFacade.removeWithSave(entity);
+        return this.http.doDelete('/saves/'+entity.getId(),{});
     }
 
     public find(id: Number) {
@@ -80,11 +73,7 @@ export class CholloFacadeHttp extends AbstractEntityFacade{
     }
 
     public findFavouritesByUser(user: Usuario){
-        return this.favoritoFacade.findAll().filter(
-            (favorito) => favorito.getUsuario().getId() == user.getId() 
-        ).map(
-            (favorito) => favorito.getChollo()
-        );
+        return this.http.doGet('users/'+user.getId()+'/favorites');
     }
 
 

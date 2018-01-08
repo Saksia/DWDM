@@ -46,8 +46,6 @@ export class MyApp {
   }
 
   refresh(categoriaId){
-    // this.navCtrl.push(this.navCtrl.getActive().component, {categoriaId: categoriaId});
-    // this.navCtrl.setRoot(this.navCtrl.getActive().component, {categoriaId: categoriaId});
     this.categoryService.setCategoryId(categoriaId);
   }
   
