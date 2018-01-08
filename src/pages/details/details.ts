@@ -86,13 +86,13 @@ export class DetailsPage {
   }
 
   getUserLikes(){
-    this.usuarioFacade.getLikesOf(this.usuario).subscribe(res => {
+    this.usuarioFacade.getLikesOf(this.chollos[0].getUsuario()).subscribe(res => {
         this.userLikes = res.json();
     });
   }
 
   getUserDislikes(){
-    this.usuarioFacade.getDislikesOf(this.usuario).subscribe(res => {
+    this.usuarioFacade.getDislikesOf(this.chollos[0].getUsuario()).subscribe(res => {
       this.userDislikes = res.json();
   });
   }
