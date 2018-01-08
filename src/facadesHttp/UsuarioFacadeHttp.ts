@@ -15,7 +15,11 @@ export class UsuarioFacadeHttp extends AbstractEntityFacade{
     // INSERT INTO usuario (telefono,alias,administrador) VALUES ("111111111","jaime",1);
     public create(entity: Usuario) { // INSERT + DEVOLVER ENTITY CON EL ULTIMO ID  
 
-        var data = { telefono : entity.getTelefono(), alias : entity.getAlias() };
+        var data = { 
+            telefono : entity.getTelefono(),
+            alias : entity.getAlias(),
+            administrador : entity.getAdministrador()
+        };
         
         return this.appService.doPost('users',data)
 
@@ -53,20 +57,12 @@ export class UsuarioFacadeHttp extends AbstractEntityFacade{
 
     // SELECT * FROM usuario WHERE telefono=?;
     public findByTelephone(telefono: String) {
-
-        this.appService.doGet('users?telefono='+telefono).subscribe(response=>{
-            this.item = response.json();
-        });
-
-        return this.item;
-        
+        return this.appService.doGet('users?telefono='+telefono);
     }
 
     // SELECT * FROM usuario WHERE alias=?;
     public findByAlias(alias: String) {
-        return this.findAll().find(
-            (usuario) => usuario.getAlias() == alias
-        );
+        return this.appService.doGet('users?alias='+alias);
     }
 
     public getLikesOf(usuario: Usuario){

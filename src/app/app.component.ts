@@ -31,8 +31,8 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
 
-      this.rootPage = this.userService.getUser() == null ? LoginPage : TabsControllerPage;
       this.loadCategories();
+      this.rootPage = (this.userService.findAndSetUser() == null) ? LoginPage : TabsControllerPage;
     });
   }
 

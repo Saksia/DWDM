@@ -4,6 +4,7 @@ import { NavParams } from 'ionic-angular/navigation/nav-params';
 import { TabsControllerPage } from '../tabs-controller/tabs-controller';
 import { UserService } from '../../services/UserService';
 import { Usuario } from '../../entities/Usuario';
+import { UsuarioFacadeHttp } from '../../facadesHttp/UsuarioFacadeHttp';
 
 @Component({
   selector: 'page-signup',
@@ -16,6 +17,7 @@ export class SignupPage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
+              private usuarioFacade: UsuarioFacadeHttp,
               private userService: UserService) {
     this.dataIsCorrect = true;
     this.aliasNotAvailable = false;
@@ -27,8 +29,17 @@ export class SignupPage {
   
   checkAlias(alias: string){
     if(!this.formIsCorrect(alias)) return;
-    var user:Usuario = this.userService.createUser(this.navParams.get("telefono"), alias);
-    user == null ? this.aliasNotAvailable = true : this.goToHome();
+    this.usuarioFacade.findByAlias(alias).subscribe(res => {
+      res.json() !== null ? this.aliasNotAvailable = true : this.createUser(alias);
+    });
+  }
+
+  createUser(alias:String){
+    this.usuarioFacade.create(new Usuario(alias, this.navParams.get("telefono"), false)).subscribe(res => {
+      var data = res.json();
+      this.userService.setUser(new Usuario(data.alias,data.telefono,data.administrador,data.id));
+      this.goToHome();
+    });
   }
 
   formIsCorrect(alias: string){

@@ -4,43 +4,37 @@ import { UsuarioFacadeHttp } from "../facadesHttp/UsuarioFacadeHttp";
 
 @Injectable()
 export class UserService {
-    private user: Usuario = new Usuario('Admin','111111111',true,1);
+    // private user: Usuario = new Usuario('Admin','111111111',true,1);
     // private user: Usuario = new Usuario('Usuario1','222222222',false,2);
-    //private user: Usuario;
+    private user: Usuario;
 
-    constructor(private usuarioFacade: UsuarioFacadeHttp){
-       // var userId: string = localStorage.getItem("userId")
-      //  if (userId == null) return;
-      // this.user = this.usuarioFacade.find(Number(userId));
+    constructor(private usuarioFacade: UsuarioFacadeHttp){      
      }
+
+    findAndSetUser(){
+        var userId: string = localStorage.getItem("userId");
+        var userAlias: string = localStorage.getItem("userAlias");
+        var userTelephone: string = localStorage.getItem("userTelephone");
+        var userAdmin: string = localStorage.getItem("userAdmin");
+        if (userId == null || userAlias == null || userTelephone == null || userAdmin == null) return null;
+        this.user = new Usuario(userAlias,userTelephone,userAdmin == "true" ? true : false, Number(userId));
+        return this.user;
+    }
 
     getUser(){
         return this.user;
     }
 
-    setUser(telefono: String){
-        this.user = this.usuarioFacade.findByTelephone(telefono);
-        if(this.user != null) this.storeUserInLocalStorage();
-        return this.user;
-    }
-
-    createUser(telefono: String, alias: String){
-        if(this.usuarioFacade.findByAlias(alias) != null) return null;
-        
-        this.usuarioFacade.create(new Usuario(
-            alias,
-            telefono,
-            false)
-        ).subscribe((res:any )=> {
-            this.user = new Usuario(res.json().alias, res.json().telefono, false, res.json().id);
-        });
-
+    setUser(user: Usuario){
+        this.user = user;
         this.storeUserInLocalStorage();
-        return this.user;
     }
 
     private storeUserInLocalStorage(){
-        localStorage.setItem("userId", this.user.getId().toString())
+        localStorage.setItem("userId", this.user.getId().toString());
+        localStorage.setItem("userAlias", this.user.getAlias().toString());
+        localStorage.setItem("userTelephone", this.user.getTelefono().toString());
+        localStorage.setItem("userAdmin", this.user.getAdministrador().toString());
     }
 
 }
