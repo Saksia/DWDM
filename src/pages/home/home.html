@@ -15,7 +15,7 @@
 
 <ion-content padding id="page2" auto-hide hide-header [header]="head">
   <ion-card *ngFor="let chollo of chollos" [hidden]="(chollo.visible == false) || (categoryService.getCategoryId() > -1 && categoryService.getCategoryId() != chollo.getCategoria().getId())">
-    <ion-item (click)="goToDetails(chollo.getId())">
+    <ion-item (click)="goToDetails(chollo)">
       <ion-avatar item-start>
         <img src="assets/img/profile.jpg">
       </ion-avatar>
