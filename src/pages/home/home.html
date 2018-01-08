@@ -20,6 +20,7 @@
         <img src="assets/img/profile.jpg">
       </ion-avatar>
       <h2>{{chollo.getUsuario().getAlias()}}</h2>
+      <ion-icon name="star" item-end color="primary" *ngIf="chollo.getUsuario().getAdministrador()"></ion-icon>
       <!-- <h3>Reputación: {{getUserLikes(chollo.getUsuario())) - (getUserDDislikes(chollo.getUsuario()))}}</h3> -->
     </ion-item>
 

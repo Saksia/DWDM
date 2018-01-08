@@ -19,7 +19,7 @@
       <h2>{{i+1}}. {{chollo.getTitulo()}}</h2>
       <!-- <p>{{chollo.getUsuario().getAlias()}}</p> -->
       <!-- <p>{{cholloFacade.getLikesCountFor(chollo)}} Likes {{cholloFacade.getDislikesCountFor(chollo)}} Dislikes</p> -->
-      <p item-end>De {{chollo.getPrecioAntes()}}€ a {{chollo.getPrecioDespues()}}€</p>
+      <p item-end><ion-icon name="star" item-end color="primary" *ngIf="chollo.getUsuario().getAdministrador()"></ion-icon> De {{chollo.getPrecioAntes()}}€ a {{chollo.getPrecioDespues()}}€</p>
     </ion-item>
   </ion-list>
   <ion-fab bottom right #fab>

@@ -38,6 +38,10 @@ export class HomePage {
     this.categoryService.setCategoryId(-1);
   }
 
+  getCardClass(chollo: Chollo){
+    return chollo.getUsuario().getAdministrador() ? "patrocinado" : "";
+  }
+
   resetCategoriesClasses(){
     var categories = document.getElementById("categoryList").children;
     for (var i = 0; i < categories.length; i++) categories[i].classList.remove("activeCategory");

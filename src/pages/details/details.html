@@ -19,6 +19,7 @@
             </ion-avatar>
             <h2>{{chollo.getUsuario().getAlias()}}</h2>
             <h3>Reputación: {{userLikes}} Likes {{userDislikes}} Dislikes</h3>
+            <ion-icon name="star" item-end color="primary" *ngIf="chollo.getUsuario().getAdministrador()"></ion-icon>
           </ion-item>
         <img src="assets/img/4.jpg">
       <ion-list>
